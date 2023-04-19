@@ -1,0 +1,52 @@
+const int EchoPin = 11;
+const int TriggerPin = 10;
+const int LED = 12;
+
+double distance = 0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(TriggerPin, OUTPUT);
+  pinMode(EchoPin, INPUT);
+  pinMode(LED, OUTPUT);
+}
+
+void loop() {
+  distance = medirDistancia();
+  if (distance <= 100){
+    alerta(LED);
+    Serial.print("Distancia: ");
+    Serial.println(distance);
+    delay(500);
+  }
+}
+
+void alerta(int led) {
+  digitalWrite(led, HIGH);
+  delay(200);
+  digitalWrite(led, LOW);
+  delay(200);
+  digitalWrite(led, HIGH);
+  delay(200);
+  digitalWrite(led, LOW);
+  delay(200);
+  digitalWrite(led, HIGH);
+  delay(200);
+  digitalWrite(led, LOW);
+  delay(200);
+}
+
+double medirDistancia() {
+  double distancia = 0;
+  double duracion = 0;
+  digitalWrite(TriggerPin, LOW);
+  delayMicroseconds(4);
+  digitalWrite(TriggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TriggerPin, LOW);
+
+  duracion = pulseIn(EchoPin, HIGH) / 2;
+
+  distancia = duracion / 29.2;
+  return distancia;
+}
