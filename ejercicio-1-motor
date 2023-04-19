@@ -1,0 +1,26 @@
+int motorPin = 9;
+int ledPin = 13;
+unsigned long motorOnTime = 0;
+
+void setup() {
+  pinMode(motorPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    if (command == "motor on") {
+      digitalWrite(motorPin, HIGH);
+      motorOnTime = millis();
+    }
+    else if (command == "led on") {
+      digitalWrite(ledPin, HIGH);
+    }
+  }
+
+  if (millis() - motorOnTime >= 5000) {
+    digitalWrite(motorPin, LOW);
+  }
+}
